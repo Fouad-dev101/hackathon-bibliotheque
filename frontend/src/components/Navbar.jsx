@@ -18,8 +18,7 @@ function Navbar() {
     color: 'white',
     display: 'flex',
     gap: '25px',
-    alignItems: 'center',
-    boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
+    alignItems: 'center'
   };
 
   const linkStyle = {
@@ -35,8 +34,7 @@ function Navbar() {
     border: 'none',
     padding: '8px 20px',
     borderRadius: '5px',
-    cursor: 'pointer',
-    fontSize: '14px'
+    cursor: 'pointer'
   };
 
   return (

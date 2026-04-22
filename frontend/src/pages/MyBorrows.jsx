@@ -35,27 +35,46 @@ function MyBorrows() {
     fetchBorrows();
   }, []);
 
-  const containerStyle = { display: 'flex', gap: '20px', flexWrap: 'wrap' };
-  const cardStyle = { border: '1px solid #ddd', borderRadius: '8px', padding: '15px', width: '300px', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' };
-  const buttonStyle = { padding: '8px 12px', marginTop: '10px', background: '#e67e22', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' };
+  const styles = {
+    container: { padding: '20px' },
+    title: { fontSize: '28px', color: '#2c3e50', marginBottom: '30px' },
+    empty: { textAlign: 'center', fontSize: '18px', color: '#7f8c8d', padding: '50px' },
+    grid: { display: 'flex', gap: '25px', flexWrap: 'wrap' },
+    card: { border: '1px solid #e0e0e0', borderRadius: '12px', padding: '20px', width: '320px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' },
+    bookTitle: { fontSize: '20px', fontWeight: 'bold', marginBottom: '10px', color: '#2c3e50' },
+    bookAuthor: { color: '#7f8c8d', marginBottom: '15px' },
+    date: { fontSize: '14px', color: '#95a5a6', marginBottom: '10px' },
+    status: { padding: '5px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: 'bold', display: 'inline-block', marginBottom: '15px' },
+    statusEnCours: { background: '#fef9e7', color: '#f39c12' },
+    statusTermine: { background: '#d5f5e3', color: '#27ae60' },
+    returnButton: { background: '#e67e22', color: 'white', border: 'none', padding: '10px 15px', borderRadius: '8px', cursor: 'pointer', width: '100%', fontSize: '16px' },
+    loading: { textAlign: 'center', fontSize: '18px', color: '#7f8c8d', padding: '50px' }
+  };
 
-  if (loading) return <div>Chargement...</div>;
+  if (loading) return <div style={styles.loading}>📖 Chargement de vos emprunts...</div>;
 
   return (
-    <div>
-      <h1>📖 Mes emprunts</h1>
+    <div style={styles.container}>
+      <h1 style={styles.title}>📖 Mes emprunts</h1>
       {borrows.length === 0 ? (
-        <p>Vous n'avez aucun emprunt.</p>
+        <div style={styles.empty}>
+          <p>📚 Vous n'avez aucun emprunt pour le moment.</p>
+          <p>Allez dans la <strong>Bibliothèque</strong> pour emprunter des livres !</p>
+        </div>
       ) : (
-        <div style={containerStyle}>
+        <div style={styles.grid}>
           {borrows.map(borrow => (
-            <div key={borrow.id} style={cardStyle}>
-              <h3>{borrow.titre}</h3>
-              <p>Auteur: {borrow.auteur}</p>
-              <p>📅 Emprunté le: {borrow.date_emprunt}</p>
-              <p>Statut: <strong style={{ color: borrow.statut === 'en cours' ? 'orange' : 'green' }}>{borrow.statut}</strong></p>
+            <div key={borrow.id} style={styles.card}>
+              <h3 style={styles.bookTitle}>{borrow.titre}</h3>
+              <p style={styles.bookAuthor}>✍️ {borrow.auteur}</p>
+              <p style={styles.date}>📅 Emprunté le : {borrow.date_emprunt}</p>
+              <span style={{ ...styles.status, ...(borrow.statut === 'en cours' ? styles.statusEnCours : styles.statusTermine) }}>
+                {borrow.statut === 'en cours' ? '🟡 En cours' : '✅ Terminé'}
+              </span>
               {borrow.statut === 'en cours' && (
-                <button onClick={() => returnBook(borrow.id)} style={buttonStyle}>🔄 Rendre</button>
+                <button onClick={() => returnBook(borrow.id)} style={styles.returnButton}>
+                  🔄 Rendre ce livre
+                </button>
               )}
             </div>
           ))}

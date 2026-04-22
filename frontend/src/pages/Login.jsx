@@ -11,7 +11,6 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    
     try {
       const res = await axios.post('http://localhost:5000/api/auth/login', { email, password });
       localStorage.setItem('token', res.data.token);
@@ -22,46 +21,16 @@ function Login() {
     }
   };
 
-  const containerStyle = {
-    maxWidth: '400px',
-    margin: '50px auto',
-    padding: '30px',
-    border: '1px solid #ddd',
-    borderRadius: '10px',
-    boxShadow: '0 0 10px rgba(0,0,0,0.1)'
-  };
-
-  const inputStyle = {
-    width: '100%',
-    padding: '10px',
-    margin: '10px 0',
-    border: '1px solid #ddd',
-    borderRadius: '5px'
-  };
-
-  const buttonStyle = {
-    width: '100%',
-    padding: '10px',
-    background: '#3498db',
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    fontSize: '16px'
-  };
-
   return (
-    <div style={containerStyle}>
+    <div style={{ maxWidth: '400px', margin: '50px auto', padding: '30px', border: '1px solid #ddd', borderRadius: '10px' }}>
       <h2>Connexion</h2>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <form onSubmit={handleSubmit}>
-        <input type="email" placeholder="Email" style={inputStyle} value={email} onChange={(e) => setEmail(e.target.value)} required />
-        <input type="password" placeholder="Mot de passe" style={inputStyle} value={password} onChange={(e) => setPassword(e.target.value)} required />
-        <button type="submit" style={buttonStyle}>Se connecter</button>
+        <input type="email" placeholder="Email" style={{ width: '100%', padding: '10px', margin: '10px 0' }} value={email} onChange={(e) => setEmail(e.target.value)} required />
+        <input type="password" placeholder="Mot de passe" style={{ width: '100%', padding: '10px', margin: '10px 0' }} value={password} onChange={(e) => setPassword(e.target.value)} required />
+        <button type="submit" style={{ width: '100%', padding: '10px', background: '#3498db', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>Se connecter</button>
       </form>
-      <p style={{ textAlign: 'center', marginTop: '15px' }}>
-        Pas de compte ? <Link to="/signup">Créer un compte</Link>
-      </p>
+      <p style={{ textAlign: 'center' }}>Pas de compte ? <Link to="/signup">Créer un compte</Link></p>
     </div>
   );
 }

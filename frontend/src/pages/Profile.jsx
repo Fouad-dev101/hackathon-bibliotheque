@@ -38,7 +38,7 @@ function Profile() {
       
       setProfile({ ...profile, nom: form.nom, prenom: form.prenom });
       setEditMode(false);
-      setMessage('Profil mis à jour !');
+      setMessage('✅ Profil mis à jour avec succès !');
       setTimeout(() => setMessage(''), 3000);
     } catch (err) {
       alert('Erreur lors de la mise à jour');
@@ -49,29 +49,72 @@ function Profile() {
     fetchProfile();
   }, []);
 
-  const containerStyle = { maxWidth: '500px', margin: '0 auto', padding: '20px', border: '1px solid #ddd', borderRadius: '10px' };
-  const inputStyle = { width: '100%', padding: '10px', margin: '10px 0', border: '1px solid #ddd', borderRadius: '5px' };
-  const buttonStyle = { padding: '10px 20px', margin: '10px 5px', border: 'none', borderRadius: '5px', cursor: 'pointer' };
+  const styles = {
+    container: { maxWidth: '600px', margin: '0 auto', padding: '30px', background: 'white', borderRadius: '16px', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' },
+    title: { fontSize: '28px', color: '#2c3e50', marginBottom: '30px', textAlign: 'center' },
+    info: { marginBottom: '20px', padding: '15px', background: '#f9f9f9', borderRadius: '10px' },
+    label: { fontWeight: 'bold', color: '#7f8c8d', marginBottom: '5px' },
+    value: { fontSize: '18px', color: '#2c3e50' },
+    input: { width: '100%', padding: '12px', margin: '10px 0', border: '1px solid #ddd', borderRadius: '8px', fontSize: '16px' },
+    buttonGroup: { display: 'flex', gap: '15px', marginTop: '20px' },
+    editButton: { background: '#3498db', color: 'white', border: 'none', padding: '12px 20px', borderRadius: '8px', cursor: 'pointer', fontSize: '16px', flex: 1 },
+    saveButton: { background: '#2ecc71', color: 'white', border: 'none', padding: '12px 20px', borderRadius: '8px', cursor: 'pointer', fontSize: '16px', flex: 1 },
+    cancelButton: { background: '#95a5a6', color: 'white', border: 'none', padding: '12px 20px', borderRadius: '8px', cursor: 'pointer', fontSize: '16px', flex: 1 },
+    message: { background: '#d5f5e3', color: '#27ae60', padding: '10px', borderRadius: '8px', textAlign: 'center', marginBottom: '20px' }
+  };
 
   return (
-    <div style={containerStyle}>
-      <h1>👤 Mon profil</h1>
-      {message && <p style={{ color: 'green' }}>{message}</p>}
+    <div style={styles.container}>
+      <h1 style={styles.title}>👤 Mon profil</h1>
+      {message && <div style={styles.message}>{message}</div>}
       
       {!editMode ? (
         <div>
-          <p><strong>Nom:</strong> {profile.nom}</p>
-          <p><strong>Prénom:</strong> {profile.prenom}</p>
-          <p><strong>Email:</strong> {profile.email}</p>
-          <button onClick={() => setEditMode(true)} style={{ ...buttonStyle, background: '#3498db', color: 'white' }}>✏️ Modifier</button>
+          <div style={styles.info}>
+            <div style={styles.label}>Nom</div>
+            <div style={styles.value}>{profile.nom}</div>
+          </div>
+          <div style={styles.info}>
+            <div style={styles.label}>Prénom</div>
+            <div style={styles.value}>{profile.prenom}</div>
+          </div>
+          <div style={styles.info}>
+            <div style={styles.label}>Email</div>
+            <div style={styles.value}>{profile.email}</div>
+          </div>
+          <button onClick={() => setEditMode(true)} style={styles.editButton}>
+            ✏️ Modifier mon profil
+          </button>
         </div>
       ) : (
         <form onSubmit={updateProfile}>
-          <input type="text" placeholder="Nom" style={inputStyle} value={form.nom} onChange={(e) => setForm({ ...form, nom: e.target.value })} required />
-          <input type="text" placeholder="Prénom" style={inputStyle} value={form.prenom} onChange={(e) => setForm({ ...form, prenom: e.target.value })} required />
-          <input type="password" placeholder="Nouveau mot de passe (optionnel)" style={inputStyle} value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
-          <button type="submit" style={{ ...buttonStyle, background: '#2ecc71', color: 'white' }}>💾 Enregistrer</button>
-          <button type="button" onClick={() => setEditMode(false)} style={{ ...buttonStyle, background: '#95a5a6', color: 'white' }}>Annuler</button>
+          <input
+            type="text"
+            placeholder="Nom"
+            style={styles.input}
+            value={form.nom}
+            onChange={(e) => setForm({ ...form, nom: e.target.value })}
+            required
+          />
+          <input
+            type="text"
+            placeholder="Prénom"
+            style={styles.input}
+            value={form.prenom}
+            onChange={(e) => setForm({ ...form, prenom: e.target.value })}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Nouveau mot de passe (optionnel)"
+            style={styles.input}
+            value={form.password}
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
+          />
+          <div style={styles.buttonGroup}>
+            <button type="submit" style={styles.saveButton}>💾 Enregistrer</button>
+            <button type="button" onClick={() => setEditMode(false)} style={styles.cancelButton}>Annuler</button>
+          </div>
         </form>
       )}
     </div>
