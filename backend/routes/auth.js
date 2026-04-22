@@ -5,7 +5,6 @@ import User from '../models/User.js';
 
 const router = express.Router();
 
-// Inscription
 router.post('/signup', async (req, res) => {
   try {
     const { nom, prenom, email, password } = req.body;
@@ -20,7 +19,7 @@ router.post('/signup', async (req, res) => {
     }
     
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await User.create({
+    await User.create({
       nom,
       prenom,
       email,
@@ -33,7 +32,6 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-// Connexion
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -49,12 +47,27 @@ router.post('/login', async (req, res) => {
     }
     
     const token = jwt.sign(
-      { id: user._id, email: user.email, nom: user.nom, prenom: user.prenom },
+      { 
+        id: user._id, 
+        email: user.email, 
+        nom: user.nom, 
+        prenom: user.prenom, 
+        role: user.role 
+      },
       process.env.JWT_SECRET,
       { expiresIn: '24h' }
     );
     
-    res.json({ token, user: { nom: user.nom, prenom: user.prenom, email: user.email } });
+    res.json({ 
+      token, 
+      user: { 
+        id: user._id,
+        nom: user.nom, 
+        prenom: user.prenom, 
+        email: user.email, 
+        role: user.role 
+      } 
+    });
   } catch (error) {
     res.status(500).json({ message: 'Erreur serveur' });
   }

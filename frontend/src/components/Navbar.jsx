@@ -18,7 +18,8 @@ function Navbar() {
     color: 'white',
     display: 'flex',
     gap: '25px',
-    alignItems: 'center'
+    alignItems: 'center',
+    boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
   };
 
   const linkStyle = {
@@ -34,7 +35,17 @@ function Navbar() {
     border: 'none',
     padding: '8px 20px',
     borderRadius: '5px',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    fontSize: '14px'
+  };
+
+  const adminBadge = {
+    background: '#e74c3c',
+    color: 'white',
+    padding: '2px 8px',
+    borderRadius: '20px',
+    fontSize: '10px',
+    marginLeft: '8px'
   };
 
   return (
@@ -43,7 +54,10 @@ function Navbar() {
       {token && (
         <>
           <Link to="/my-borrows" style={linkStyle}>📖 Mes emprunts</Link>
-          <Link to="/profile" style={linkStyle}>👤 {user.prenom || 'Profil'}</Link>
+          <Link to="/profile" style={linkStyle}>
+            👤 {user.prenom || 'Profil'}
+            {user.role === 'admin' && <span style={adminBadge}>Admin</span>}
+          </Link>
           <button onClick={handleLogout} style={buttonStyle}>Déconnexion</button>
         </>
       )}

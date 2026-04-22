@@ -1,10 +1,10 @@
 import express from 'express';
 import Book from '../models/Book.js';
 import auth from '../middleware/auth.js';
+import isAdmin from '../middleware/admin.js';
 
 const router = express.Router();
 
-// Liste de tous les livres
 router.get('/', auth, async (req, res) => {
   try {
     const books = await Book.find();
@@ -14,8 +14,7 @@ router.get('/', auth, async (req, res) => {
   }
 });
 
-// Ajouter un livre
-router.post('/', auth, async (req, res) => {
+router.post('/', auth, isAdmin, async (req, res) => {
   try {
     const { titre, auteur } = req.body;
     
@@ -30,8 +29,7 @@ router.post('/', auth, async (req, res) => {
   }
 });
 
-// Supprimer un livre
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', auth, isAdmin, async (req, res) => {
   try {
     await Book.findByIdAndDelete(req.params.id);
     res.json({ message: 'Livre supprimé' });

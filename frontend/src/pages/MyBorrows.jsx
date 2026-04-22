@@ -20,14 +20,16 @@ function MyBorrows() {
     }
   };
 
-  const returnBook = async (borrowId) => {
+  const returnBook = async (borrowId, titre) => {
+    if (!window.confirm(`Retourner le livre "${titre}" ?`)) return;
     try {
       await axios.put(`http://localhost:5000/api/borrows/return/${borrowId}`, {}, {
         headers: { Authorization: `Bearer ${getToken()}` }
       });
+      alert(`✅ "${titre}" a été retourné !`);
       fetchBorrows();
     } catch (err) {
-      alert('Erreur lors du retour');
+      alert(err.response?.data?.message || 'Erreur lors du retour');
     }
   };
 
@@ -38,9 +40,9 @@ function MyBorrows() {
   const styles = {
     container: { padding: '20px' },
     title: { fontSize: '28px', color: '#2c3e50', marginBottom: '30px' },
-    empty: { textAlign: 'center', fontSize: '18px', color: '#7f8c8d', padding: '50px' },
+    empty: { textAlign: 'center', fontSize: '18px', color: '#7f8c8d', padding: '50px', background: 'white', borderRadius: '16px' },
     grid: { display: 'flex', gap: '25px', flexWrap: 'wrap' },
-    card: { border: '1px solid #e0e0e0', borderRadius: '12px', padding: '20px', width: '320px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' },
+    card: { border: '1px solid #e0e0e0', borderRadius: '12px', padding: '20px', width: '320px', background: 'white', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' },
     bookTitle: { fontSize: '20px', fontWeight: 'bold', marginBottom: '10px', color: '#2c3e50' },
     bookAuthor: { color: '#7f8c8d', marginBottom: '15px' },
     date: { fontSize: '14px', color: '#95a5a6', marginBottom: '10px' },
@@ -72,7 +74,7 @@ function MyBorrows() {
                 {borrow.statut === 'en cours' ? '🟡 En cours' : '✅ Terminé'}
               </span>
               {borrow.statut === 'en cours' && (
-                <button onClick={() => returnBook(borrow.id)} style={styles.returnButton}>
+                <button onClick={() => returnBook(borrow.id, borrow.titre)} style={styles.returnButton}>
                   🔄 Rendre ce livre
                 </button>
               )}

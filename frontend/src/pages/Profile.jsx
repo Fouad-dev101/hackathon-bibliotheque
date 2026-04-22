@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function Profile() {
-  const [profile, setProfile] = useState({ nom: '', prenom: '', email: '' });
+  const [profile, setProfile] = useState({ nom: '', prenom: '', email: '', role: '' });
   const [editMode, setEditMode] = useState(false);
   const [form, setForm] = useState({ nom: '', prenom: '', password: '' });
   const [message, setMessage] = useState('');
@@ -25,7 +25,9 @@ function Profile() {
     e.preventDefault();
     try {
       const updateData = { nom: form.nom, prenom: form.prenom };
-      if (form.password) updateData.password = form.password;
+      if (form.password && form.password.trim() !== '') {
+        updateData.password = form.password;
+      }
       
       await axios.put('http://localhost:5000/api/profile', updateData, {
         headers: { Authorization: `Bearer ${getToken()}` }
@@ -60,12 +62,16 @@ function Profile() {
     editButton: { background: '#3498db', color: 'white', border: 'none', padding: '12px 20px', borderRadius: '8px', cursor: 'pointer', fontSize: '16px', flex: 1 },
     saveButton: { background: '#2ecc71', color: 'white', border: 'none', padding: '12px 20px', borderRadius: '8px', cursor: 'pointer', fontSize: '16px', flex: 1 },
     cancelButton: { background: '#95a5a6', color: 'white', border: 'none', padding: '12px 20px', borderRadius: '8px', cursor: 'pointer', fontSize: '16px', flex: 1 },
-    message: { background: '#d5f5e3', color: '#27ae60', padding: '10px', borderRadius: '8px', textAlign: 'center', marginBottom: '20px' }
+    message: { background: '#d5f5e3', color: '#27ae60', padding: '10px', borderRadius: '8px', textAlign: 'center', marginBottom: '20px' },
+    adminBadge: { background: '#e74c3c', color: 'white', padding: '2px 8px', borderRadius: '20px', fontSize: '12px', marginLeft: '10px' }
   };
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>👤 Mon profil</h1>
+      <h1 style={styles.title}>
+        👤 Mon profil
+        {profile.role === 'admin' && <span style={styles.adminBadge}>Admin</span>}
+      </h1>
       {message && <div style={styles.message}>{message}</div>}
       
       {!editMode ? (
